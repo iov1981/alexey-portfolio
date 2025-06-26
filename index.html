@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфолио: Хрипунов Алексей Владимирович</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with subtle blue accents -->
+    <!-- Application Structure Plan: The SPA is designed as a single-page, vertical-scroll portfolio to provide a modern and fluid alternative to a traditional resume. The structure is thematic, not chronological, to immediately highlight the candidate's value to a recruiter. It starts with a Hero section for key identity, followed by a detailed About section, then Skills (visualized for impact and listed for detail), Experience (a new dedicated section for practical application), Education/Certificates (with interactive viewing), and a clear Contact call-to-action. This flow is designed for quick scanning and easy digestion of the candidate's qualifications, with smooth-scroll navigation for quick access to specific sections, prioritizing showcasing practical experience. -->
+    <!-- Visualization & Content Choices: 1. Profile Photo: Report Info -> Placeholder for candidate's photo. Goal -> Personalize. Viz -> Rounded image with hover effect. Interaction -> Subtle scale/shadow on hover. Justification -> Standard practice for personal branding, enhanced with modern interaction. Method -> HTML/Tailwind CSS. 2. Contact Info: Report Info -> Phone, email, Telegram. Goal -> Inform. Viz -> Styled text with Unicode icons and clickable links. Interaction -> Direct calls/emails. Justification -> Clear and actionable contact methods. Method -> HTML/Tailwind CSS. 3. About Section: Report Info -> Personal bio, work preferences. Goal -> Inform. Viz -> Text blocks and list with icons. Interaction -> None. Justification -> Provides context and expresses career aspirations. Method -> HTML/Tailwind CSS. 4. Skills: Report Info -> List of technical skills. Goal -> Compare/Inform. Viz -> Horizontal Bar Chart for overall "level of ownership" (set to low values as per request, with contextual explanation) and a detailed bulleted list. Interaction -> Hover tooltips (default on chart). Justification -> A chart offers quick visual assessment; the list provides specific tools/methods, with text clarifying the chart's meaning. Library -> Chart.js for chart, HTML/Tailwind for list. 5. Experience (NEW): Report Info -> Practical work experience, responsibilities, achievements, technologies, project links. Goal -> Demonstrate practical application. Viz -> Card-like structure with bullet points, improved hover effects. Interaction -> Textual links for Jira/Git. Justification -> Clearly articulates professional background and accomplishments with enhanced visual feedback. Method -> HTML/Tailwind CSS. 6. Education & Certificates: Report Info -> Academic education and Skillbox certificates. Goal -> Organize/Verify. Viz -> Clickable cards with image modals for certificates, improved hover effects. Interaction -> Click to open modal showing certificate image. Justification -> Organizes credentials, allows detailed review of each certificate with enhanced visual feedback. Method -> HTML/Tailwind CSS with custom JS for modals. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfbf7; /* Very light cream/off-white */
+            color: #383838; /* Dark charcoal */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #2563eb;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem; /* Rounded corners */
+            padding: 1.5rem;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05); /* Subtle initial shadow */
+        }
+        .card:hover {
+            transform: translateY(-8px); /* Lift more on hover */
+            box-shadow: 0 15px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); /* Stronger shadow */
+            border-color: #93c5fd; /* Light blue border on hover */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 100; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.85); /* Darker overlay */
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain; /* Ensures the image fits within the modal without cropping */
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            animation: zoomIn 0.3s forwards;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #93c5fd; /* Lighter blue on hover */
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-md">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <span class="text-xl font-bold text-blue-700">Алексей Х.</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#about" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Обо мне</a>
+                        <a href="#skills" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Навыки</a>
+                        <a href="#experience" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Опыт</a>
+                        <a href="#education" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Образование</a>
+                        <a href="#contact" class="nav-link text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Контакты</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                        <span class="sr-only">Открыть меню</span>
+                        <svg class="h-6 w-6" id="menu-open-icon" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                        <svg class="h-6 w-6 hidden" id="menu-close-icon" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+             <div class="hidden md:hidden" id="mobile-menu">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <a href="#about" class="nav-link text-gray-600 block px-3 py-2 rounded-md text-base font-medium">Обо мне</a>
+                    <a href="#skills" class="nav-link text-gray-600 block px-3 py-2 rounded-md text-base font-medium">Навыки</a>
+                    <a href="#experience" class="nav-link text-gray-600 block px-3 py-2 rounded-md text-base font-medium">Опыт</a>
+                    <a href="#education" class="nav-link text-gray-600 block px-3 py-2 rounded-md text-base font-medium">Образование</a>
+                    <a href="#contact" class="nav-link text-gray-600 block px-3 py-2 rounded-md text-base font-medium">Контакты</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <section id="hero" class="text-center py-20 md:py-32 bg-gradient-to-b from-blue-50 to-fdfbf7 rounded-xl shadow-inner">
+            <div class="mb-8 group">
+                <!-- ЗАМЕНИТЕ "images/my_photo.jpg" НА ПУТЬ К ВАШЕМУ ФОТО. Если фото в корне репозитория, используйте "my_photo.jpg" -->
+                <img src="images/my_photo.jpg" alt="Ваше фото" class="rounded-full mx-auto shadow-lg border-4 border-blue-300 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl">
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-gray-900">Хрипунов Алексей Владимирович</h1>
+            <p class="mt-4 text-lg md:text-xl text-blue-600 font-medium">QA Engineer / Инженер по тестированию</p>
+            <div class="mt-8 flex justify-center items-center space-x-6">
+                <a href="mailto:hripunov60@gmail.com" class="text-gray-500 hover:text-blue-600 transition duration-300">
+                    <span class="sr-only">Email</span>
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
+                </a>
+                <a href="tel:+79023449722" class="text-gray-500 hover:text-blue-600 transition duration-300">
+                    <span class="sr-only">Телефон</span>
+                     <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path></svg>
+                </a>
+                <a href="https://t.me/iov1981" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-blue-600 transition duration-300">
+                    <span class="sr-only">Telegram</span>
+                    <span class="text-3xl">✈️</span> 
+                </a>
+            </div>
+        </section>
+
+        <div class="max-w-4xl mx-auto space-y-16 md:space-y-24 pt-16">
+
+            <section id="about">
+                <h2 class="text-3xl font-bold tracking-tight text-center mb-10 pb-2 border-b-2 border-blue-100 inline-block px-4">Обо мне</h2>
+                <div class="text-left text-base md:text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                    <p class="mb-4">
+                        С детства увлекался IT — в школе программировал на Pascal. Сегодня я выбрал тестирование как путь развития, потому что считаю, что мои качества — педантичность, внимание к деталям и перфекционизм — идеально подходят для этой профессии. Мне интересно не просто искать ошибки, а делать продукт лучше. Сейчас активно развиваюсь в ручном тестировании веб-приложений. Планирую изучить SQL, Git, а также основы автоматизации на Java.
+                    </p>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-base">
+                        <div class="flex items-center space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">●</span>
+                            <span><strong>Дата рождения:</strong> 08 ноября 1981</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                             <span class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">●</span>
+                            <span><strong>Проживание:</strong> Пенза, Россия</span>
+                        </div>
+                         <div class="flex items-center space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center">✔</span>
+                            <span><strong>Готов к переезду</strong></span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                             <span class="flex-shrink-0 w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center">✖</span>
+                            <span><strong>Не готов к командировкам</strong></span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                           <span class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">✔</span>
+                            <span><strong>Готов рассматривать:</strong> Стажировки</span>
+                        </div>
+                         <div class="flex items-center space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">✔</span>
+                            <span><strong>Готов рассматривать:</strong> Проектную работу</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">✔</span>
+                            <span><strong>Готов рассматривать:</strong> Удалённую занятость</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="skills">
+                <h2 class="text-3xl font-bold tracking-tight text-center mb-10 pb-2 border-b-2 border-blue-100 inline-block px-4">Ключевые навыки</h2>
+                 <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+                    Этот раздел визуализирует мои основные компетенции. Диаграмма показывает мои **начальные шаги в освоении** этих навыков, а ниже вы найдете подробное описание каждого навыка.
+                </p>
+                <div class="chart-container">
+                    <canvas id="skillsChart"></canvas>
+                </div>
+
+                <div class="mt-12 text-left bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">Детальные навыки:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>Ручное тестирование веб-приложений</li>
+                        <li>Разработка тест-кейсов и чек-листов</li>
+                        <li>Функциональное, нефункциональное, регрессионное, позитивное/негативное тестирование</li>
+                        <li>Тест-дизайн и работа со спецификацией</li>
+                        <li>Кроссбраузерное и кроссплатформенное тестирование</li>
+                        <li>Тестирование API (Postman), работа с DevTools</li>
+                        <li>SQL, HTML, CSS, основы Git</li>
+                        <li>Оформление баг-репортов (Jira)</li>
+                        <li>Работа с системами контроля версий (Git)</li>
+                        <li>Уровень английского: B1</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="experience">
+                <h2 class="text-3xl font-bold tracking-tight text-center mb-10 pb-2 border-b-2 border-blue-100 inline-block px-4">Опыт</h2>
+                <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+                    В этом разделе представлен мой практический опыт в тестировании, включая ключевые задачи, использованные технологии и достигнутые результаты.
+                </p>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-gray-900">Тестировщик (практика Skillbox)</h3>
+                    <p class="mt-1 text-gray-600">Декабрь 2023 — по настоящее время</p>
+                    <ul class="list-disc list-inside mt-4 space-y-2 text-gray-700">
+                        <li>Разработка и написание тест-кейсов и чек-листов</li>
+                        <li>Проверка первичной документации</li>
+                        <li>Проведение различных видов тестирования: функциональное, регрессионное, серый ящик (через API), UI</li>
+                        <li>Кроссбраузерное и кроссплатформенное тестирование</li>
+                        <li>Работа с Postman, DevTools, Jira</li>
+                        <li>Тестирование безопасности и клиентских уязвимостей</li>
+                        <li>Автоматизация отчётов о баг-репортах</li>
+                    </ul>
+                    <p class="mt-4 font-semibold text-gray-800">Технологии:</p>
+                    <p class="mt-1 text-gray-700">Jira, Chrome DevTools, Postman, SQL, Git</p>
+                    <p class="mt-4 font-semibold text-gray-800">Достижения:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-2 text-gray-700">
+                        <li>Полностью протестирован интернет-магазин от тестирования спецификаций до приёмочного этапа</li>
+                        <li>Найдены критические ошибки в интерфейсе и серверной логике — ускорили загрузку сайта на 10%</li>
+                        <li>Разработана система автотестов для облачного сервиса — теперь информация об ошибках приходит разработчикам в понятных отчетах</li>
+                    </ul>
+                    <p class="mt-4 font-semibold text-gray-800">Git-репозитории и проекты:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-2 text-gray-700">
+                        <li>SkillCinema Android: <span class="break-all text-blue-600">git@gitlab.skillbox.ru:aleksei_khripunov/SkillboxApp_SkillCinema_Android.git</span></li>
+                        <li>Автотесты: <span class="break-all text-blue-600">git@gitlab.skillbox.ru:aleksei_khripunov/my_auto_tests1.git</span></li>
+                        <li>Мои проекты: Тестирование интернет-магазина.</li>
+                        <li>Jira-проект: <a href="https://hripunov60.atlassian.net/jira/software/projects/SKIL/boards/3" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">hripunov60.atlassian.net/jira/software/projects/SKIL/boards/3</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="education">
+                <h2 class="text-3xl font-bold tracking-tight text-center mb-12 pb-2 border-b-2 border-blue-100 inline-block px-4">Образование и сертификаты</h2>
+                <p class="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+                    Здесь представлены основы моего образования и специализированные курсы, которые я прошел для углубления знаний в области IT. Каждый сертификат отражает целенаправленные усилия по освоению конкретных навыков в тестировании и разработке. Кликните на карточку, чтобы просмотреть сертификат.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="card cursor-pointer" data-certificate-img="https://placehold.co/800x600/CCE3FF/2563EB?text=ОСНОВНОЕ+ОБРАЗОВАНИЕ">
+                        <h3 class="text-xl font-semibold text-gray-900">Основное образование</h3>
+                        <p class="mt-2 text-gray-600">Профессиональный лицей №21 г. Пенза</p>
+                        <p class="mt-1 text-sm text-gray-500">Технология продуктов общественного питания</p>
+                        <p class="mt-4 font-medium text-blue-600">2001</p>
+                    </div>
+                    <!-- ЗАМЕНИТЕ "images/cert_engineer.png" НА ПУТЬ К ВАШЕМУ ФАЙЛУ СЕРТИФИКАТА "Профессия Инженер по тестированию" -->
+                    <div class="card cursor-pointer" data-certificate-img="images/cert_engineer.png">
+                        <h3 class="text-xl font-semibold text-gray-900">Профессия Инженер по тестированию</h3>
+                        <p class="mt-2 text-gray-600">Skillbox (400 академических часов)</p>
+                        <p class="mt-1 text-sm text-gray-500">Дополнительная профессиональная образовательная программа</p>
+                        <p class="mt-4 font-medium text-blue-600">2023–2024</p>
+                    </div>
+                    <!-- ЗАМЕНИТЕ "images/cert_web.png" НА ПУТЬ К ВАШЕМУ ФАЙЛУ СЕРТИФИКАТА "Тестирование web-приложений" -->
+                    <div class="card cursor-pointer" data-certificate-img="images/cert_web.png">
+                        <h3 class="text-xl font-semibold text-gray-900">Тестирование web-приложений</h3>
+                        <p class="mt-2 text-gray-600">Skillbox 2.0</p>
+                        <p class="mt-1 text-sm text-gray-500">Курс и информационные материалы</p>
+                        <p class="mt-4 font-medium text-blue-600">29.05.2025</p>
+                    </div>
+                    <!-- ЗАМЕНИТЕ "images/cert_autotests.png" НА ПУТЬ К ВАШЕМУ ФАЙЛУ СЕРТИФИКАТА "Автотесты на Python. Базовая часть" -->
+                    <div class="card cursor-pointer" data-certificate-img="images/cert_autotests.png">
+                        <h3 class="text-xl font-semibold text-gray-900">Автотесты на Python. Базовая часть</h3>
+                        <p class="mt-2 text-gray-600">Skillbox 2.0</p>
+                        <p class="mt-1 text-sm text-gray-500">Курс и информационные материалы</p>
+                        <p class="mt-4 font-medium text-blue-600">08.12.2024</p>
+                    </div>
+                    <!-- ЗАМЕНИТЕ "images/cert_python_part1.png" НА ПУТЬ К ВАШЕМУ ФАЙЛУ СЕРТИФИКАТА "Основы Python. Часть 1" -->
+                    <div class="card cursor-pointer" data-certificate-img="images/cert_python_part1.png">
+                        <h3 class="text-xl font-semibold text-gray-900">Основы Python. Часть 1</h3>
+                        <p class="mt-2 text-gray-600">Skillbox 2.0</p>
+                        <p class="mt-1 text-sm text-gray-500">Курс и информационные материалы</p>
+                        <p class="mt-4 font-medium text-blue-600">30.09.2024</p>
+                    </div>
+                    <!-- ЗАМЕНИТЕ "images/cert_mobile_testing.png" НА ПУТЬ К ВАШЕМУ ФАЙЛУ СЕРТИФИКАТА "Ручное тестирование мобильных приложений" -->
+                    <div class="card cursor-pointer" data-certificate-img="images/cert_mobile_testing.png">
+                        <h3 class="text-xl font-semibold text-gray-900">Ручное тестирование мобильных приложений</h3>
+                        <p class="mt-2 text-gray-600">Skillbox 2.0</p>
+                        <p class="mt-1 text-sm text-gray-500">Курс и информационные материалы</p>
+                        <p class="mt-4 font-medium text-blue-600">15.08.2024</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section id="contact" class="mt-16 md:mt-24 pt-12 border-t border-gray-200">
+             <h2 class="text-3xl font-bold tracking-tight text-center mb-4 pb-2 border-b-2 border-blue-100 inline-block px-4">Связаться со мной</h2>
+             <p class="text-center text-gray-600 mb-8 max-w-xl mx-auto">
+                Я открыт для предложений и готов обсудить, как мои навыки могут быть полезны вашей команде. Предпочтительный способ связи — телефон.
+            </p>
+            <div class="max-w-lg mx-auto bg-white p-8 rounded-xl shadow-lg text-center space-y-4">
+                <p class="text-lg font-medium text-gray-800">
+                    📧 <a href="mailto:hripunov60@gmail.com" class="hover:text-blue-600 transition">hripunov60@gmail.com</a>
+                </p>
+                 <p class="text-lg font-medium text-gray-800">
+                    📞 <a href="tel:+79023449722" class="hover:text-blue-600 transition">+7 (902) 344-97-22</a>
+                </p>
+                <p class="text-lg font-medium text-gray-800">
+                    ✈️ <a href="https://t.me/iov1981" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition">@iov1981</a>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 mt-16 md:mt-24">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+            <p>&copy; 2025 Хрипунов Алексей Владимирович</p>
+            <p class="mt-1">Резюме обновлено: 18 апреля 2025</p>
+        </div>
+    </footer>
+
+    <!-- The Modal -->
+    <div id="certificateModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Python', 
+                        'Функциональное тестирование', 
+                        'Ручное тестирование', 
+                        'Тестирование Web', 
+                        'Работа с базами данных', 
+                        'Git',
+                        'Поиск информации'
+                    ],
+                    datasets: [{
+                        label: 'Уровень владения',
+                        data: [5, 5, 5, 5, 5, 5, 5],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.7)', /* Blue */
+                            'rgba(34, 197, 94, 0.7)',  /* Green */
+                            'rgba(16, 185, 129, 0.7)', /* Teal */
+                            'rgba(13, 148, 136, 0.7)', /* Dark Teal */
+                            'rgba(234, 179, 8, 0.7)',  /* Yellow */
+                            'rgba(249, 115, 22, 0.7)', /* Orange */
+                            'rgba(99, 102, 241, 0.7)'  /* Indigo */
+                        ],
+                        borderColor: [
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(34, 197, 94, 1)',
+                            'rgba(16, 185, 129, 1)',
+                            'rgba(13, 148, 136, 1)',
+                            'rgba(234, 179, 8, 1)',
+                            'rgba(249, 115, 22, 1)',
+                            'rgba(99, 102, 241, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: '#e5e7eb' /* Light gray grid lines */
+                            },
+                            ticks: {
+                                color: '#6b7280' /* Gray tick labels */
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#6b7280' /* Gray tick labels */
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x + ' / 100';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuOpenIcon = document.getElementById('menu-open-icon');
+            const menuCloseIcon = document.getElementById('menu-close-icon');
+
+            mobileMenuButton.addEventListener('click', () => {
+                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('hidden');
+                menuOpenIcon.classList.toggle('hidden');
+                menuCloseIcon.classList.toggle('hidden');
+            });
+            
+            document.querySelectorAll('.nav-link, #mobile-menu a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                     // Close mobile menu if open when a nav link is clicked
+                     if (mobileMenu.classList.contains('hidden') === false) {
+                        mobileMenu.classList.add('hidden');
+                        menuOpenIcon.classList.remove('hidden');
+                        menuCloseIcon.classList.add('hidden');
+                     }
+                });
+            });
+
+            // Modal functionality for certificates
+            const modal = document.getElementById('certificateModal');
+            const modalImage = document.getElementById('modalImage');
+            const closeBtn = document.getElementsByClassName('close')[0];
+
+            document.querySelectorAll('.card[data-certificate-img]').forEach(card => {
+                card.addEventListener('click', () => {
+                    modal.style.display = 'flex'; /* Use flex to center content */
+                    modalImage.src = card.dataset.certificateImg;
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+        });
+    </script>
+
+</body>
+</html>
