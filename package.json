@@ -1,0 +1,31 @@
+{
+  "name": "alexey-portfolio",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iov1981/alexey-portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iov1981/alexey-portfolio/issues"
+  },
+  "homepage": "https://github.com/iov1981/alexey-portfolio#readme",
+  "description": "",
+  "devDependencies": {
+    "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.4"
+  }
+}
