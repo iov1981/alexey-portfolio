@@ -6,7 +6,7 @@
     <title>Портфолио | Алексей Хрипунов — QA Engineer</title>
 
     <!-- Telegram Web App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js?v=2.0"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -128,12 +128,13 @@
                     <span>Telegram</span>
                 </a>
 
+                <!-- Кнопка «Поделиться портфолио» -->
                 <button id="shareBtn"
                         class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-medium transition shadow-lg shadow-blue-500/25">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
                     </svg>
-                    <span id="shareBtnText">Поделиться визиткой</span>
+                    <span id="shareBtnText">Поделиться портфолио</span>
                 </button>
 
                 <a href="tel:+79023449722"
@@ -447,13 +448,12 @@
     </div>
 
     <script>
-        // Инициализация Telegram WebApp
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.expand();
         }
 
-        // Кнопка «Поделиться визиткой»
+        // Кнопка «Поделиться портфолио»
         const shareBtn = document.getElementById('shareBtn');
         const shareBtnText = document.getElementById('shareBtnText');
         const portfolioUrl = 'https://iov1981.github.io/alexey-portfolio/';
@@ -463,13 +463,11 @@
             shareBtn.addEventListener('click', async () => {
                 const tgShareUrl = `https://t.me/share/url?url=${encodeURIComponent(portfolioUrl)}&text=${encodeURIComponent(shareText)}`;
 
-                // Внутри Telegram Web App
                 if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
                     window.Telegram.WebApp.openTelegramLink(tgShareUrl);
                     return;
                 }
 
-                // Через браузерный Web Share API
                 if (navigator.share) {
                     try {
                         await navigator.share({
@@ -478,12 +476,9 @@
                             url: portfolioUrl
                         });
                         return;
-                    } catch (err) {
-                        // Отмена пользователем
-                    }
+                    } catch (err) {}
                 }
 
-                // Копирование в буфер обмена
                 try {
                     await navigator.clipboard.writeText(portfolioUrl);
                     const originalText = shareBtnText.innerText;
@@ -497,13 +492,11 @@
             });
         }
 
-        // Мобильное меню
         const btn = document.getElementById('mobile-menu-button');
         const menu = document.getElementById('mobile-menu');
         btn.addEventListener('click', () => menu.classList.toggle('hidden'));
         document.querySelectorAll('#mobile-menu a').forEach(a => a.addEventListener('click', () => menu.classList.add('hidden')));
 
-        // Модальное окно для сертификатов
         const modal = document.getElementById('certificateModal');
         const modalImg = document.getElementById('modalImage');
         const closeBtn = document.getElementById('closeModal');
